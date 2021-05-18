@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{%block user %} active {% endblock %}
+{% block body %}
+<b>EDIT ARTICLE</b>
+<div class="container my-3">
+<form method="post" action="{% url 'users:editArticle' post.slug %}" >
+    {% csrf_token %}
+    {{form.media}}
+        {% for field in form %}
+    <div class="form-group">
+            <label for="{{ field.label }}" class="form-group">{{ field.label_tag }}</label>
+            {{field}}
+            {% endfor %}
+        </div>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit" name="submit" value="submit">Add</button>
+    </div>
+</form>
+</div>
+
+{% endblock %}

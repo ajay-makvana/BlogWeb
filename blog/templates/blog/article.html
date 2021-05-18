@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{%block blog %} active {% endblock %}
+{%block body%}
+<div align="center">
+    <h2>{{post.title}}</h2>
+</div>
+<div class="container my-3">
+    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary">{{post.title}}</strong>
+            <div class="mb-1 text-muted">Created On : {{post.created_on}}</div>
+            <div class="mb-1 text-muted">Last Update On : {{post.updated_on}}</div>
+            <p class="card-text mb-auto">{{post.content|safe}} ...</p>
+            <div class="my-2">
+                <a href="/blog" role="button" class="btn btn-primary"><- Back</a> </div> </div> <div class="col-auto d-none d-lg-block">
+                        <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
+                            <title>Placeholder</title>
+                            <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                        </svg>
+            </div>
+        </div>
+    </div>
+    <div class="container my-3">
+        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-2 text-primary"></strong>
+                {% if user.is_authenticated %}
+                <strong class="d-inline-block mb-2 text-primary">Add Comments</strong>
+                <form method="post" action="{% url 'users:comment' post.slug %}">
+                    {% csrf_token %}
+                        {% for field in form %}
+                            <div class="input-group mb-3">
+                                <label for="{{ field.label }}" class="input-group-text" id="basic-addon1">{{ field.label_tag }}</label>
+                                {{ field }}
+                            </div>
+                            {% endfor %}
+                    <input class="btn btn-primary" type="submit" name="submit" value="Comment">
+                </form>
+                {% else %}
+                <a href="{% url 'users:comment' post.slug %}">Login To Add Comment</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container my-3">
+        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+                <strong class="d-inline-block mb-0 text-primary">Comments</strong>
+        {% for comment in comments %}
+        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-1 shadow-sm h-md-250 my-0 position-relative">
+            <div class="col p-2 d-flex flex-column position-static">
+                <div class="mb-0">{{comment.content}}</div>
+                <b>
+                    <div class="mb-0">By {{comment.user.username}} At {{comment.created_on}}</div>
+                </b>
+            </div>
+        </div>
+        {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
