@@ -10,10 +10,13 @@ def blog(request):
     return render(request,'blog/blog.html',blogposts)
 
 def article(request,slugOfArticle):
-    article = Post.objects.filter(slug=slugOfArticle)
+    # added .first() to get only first article of this QuerySet 
+    article = Post.objects.filter(slug=slugOfArticle).first()
+    article.total_views = article.total_views + 1
+    article.save()
     form = CommentForm()
-    comments = Comment.objects.filter(postid=article[0].id).order_by('-created_on')
-    context = {'post':article[0],'comments':comments,'form':form}
+    comments = Comment.objects.filter(postid=article.id).order_by('-created_on')
+    context = {'post':article,'comments':comments,'form':form}
     return render(request,'blog/article.html',context)
 
 @login_required(login_url = 'users:login')

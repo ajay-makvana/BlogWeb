@@ -12,7 +12,8 @@
             <strong class="d-inline-block mb-2 text-primary">{{post.title}}</strong>
             <div class="mb-0">By : {{post.author}}</div>
             <div class="mb-1 text-muted">Created On : {{post.created_on}}</div>
-            <div class="mb-1 text-muted">Last Update On : {{post.updated_on}}</div><br>
+            <div class="mb-1 text-muted">Last Update On : {{post.updated_on}}</div>
+            <div class="mb-1 text-muted">Views : {{post.total_views}}</div><br>
             <p class="card-text mb-auto">{{post.content|safe|slice:"0:270"}} ...</p><br>
             <div class="my-2">
                 <a href="{% url 'blog:article' post.slug %}" role="button" class="btn btn-primary">Continue reading</a>
