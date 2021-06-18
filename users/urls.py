@@ -1,24 +1,20 @@
-from django.contrib import admin
+from django.contrib import admin,auth
 from django.urls import path,include
 from . import views
 
 app_name = 'users'
 
 urlpatterns = [
-    # Login Page
-    path('login/',views.login,name='login'),
-    # Registration page.
-    path('signup/', views.signup, name='signup'),
-    #Logout Page
-    path('logout/', views.logout, name='logout'),
+    # User Registration
+    path('register/',views.register ,name='register'),
+    # User Inbuilt
+    path('',include('django.contrib.auth.urls')),
     #User Home Page
     path('home/', views.home, name='home'),
     #New Article
     path('new-article/', views.newArticle, name='newArticle'),
     #User's Own Article
     path('my-articles/', views.userAllArticles, name='userAllArticles'),
-    #Comment
-    path('<str:slugOfArticle>', views.comment, name='comment'),
     #User's Specific Article
     path('my-articles/<str:slugOfArticle>', views.specific_article, name='specific_article'),
     #EditArticles

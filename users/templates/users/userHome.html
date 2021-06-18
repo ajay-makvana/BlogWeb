@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {%block user %} active {% endblock %}
 {% block body %}
-<i>Hey, {{user.username}} </i><br>
-<b><a href="{% url 'users:newArticle' %}">Add New Article</a></b><br>
-<b><a href="{% url 'users:userAllArticles' %}">All Your Article</a></b><br>
-<b>Your all blog post are as bellow</b>
-<table>
-    {% for blog in blogposts %}
-    <tr>
-        <td>{{forloop.counter}}. {{blog.title}}&nbsp;&nbsp;&nbsp;</td>
-        <td><a href="{% url 'users:editArticle' blog.slug %}">Edit It </a>&nbsp;&nbsp;&nbsp;</td>
-        <td><a href="{% url 'users:specific_article' blog.slug %}"> View Article </a>&nbsp;&nbsp;&nbsp;</td>
-    </tr>
-    {% endfor %}
-</table>
+<div class="container my-3">
+    <i>Hey, {{user.username}} </i><br>
+    <b><a href="{% url 'users:newArticle' %}">Add New Article</a></b><br>
+    <b><a href="{% url 'users:userAllArticles' %}">All Your Article</a></b><br>
+    <b>Your all blog post are as bellow</b>
+    <table>
+        {% for blog in blogposts %}
+        <tr>
+            <td>{{forloop.counter}}. {{blog.title}}&nbsp;&nbsp;&nbsp;</td>
+            <td><a href="{% url 'users:editArticle' blog.slug %}">Edit It </a>&nbsp;&nbsp;&nbsp;</td>
+            <td><a href="{% url 'users:specific_article' blog.slug %}"> View Article </a>&nbsp;&nbsp;&nbsp;</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
 {% endblock %}

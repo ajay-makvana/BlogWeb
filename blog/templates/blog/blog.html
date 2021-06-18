@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
 {%block blog %} active {% endblock %}
 {%block body%}
-<h2>Blog Posts</h2>
+<h2 align='center'>
+    Blog Post
+</h2>
 {% for post in blogposts %}
 <div class="container my-3">
-    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
+    <div
+        class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-primary">{{post.title}}</strong>
             <div class="mb-0">By : {{post.author}}</div>
