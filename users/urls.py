@@ -19,4 +19,6 @@ urlpatterns = [
     path('my-articles/<str:slugOfArticle>', views.specific_article, name='specific_article'),
     #EditArticles
     path('my-articles/edit/<str:slugOfArticle>', views.editArticle, name='editArticle'),
+    #DeleteArticle
+    path('<str:slugOfArticle>', views.deleteArticle, name='deleteArticle'),
 ]

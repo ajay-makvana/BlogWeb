@@ -1,5 +1,28 @@
 {% extends 'base.html' %}
 {%block logout %} active {% endblock %}
 {%block body%}
-Logout Page
+
+<div class="container my-3" style="text-align: center!important;">
+    <h3> Thank You For Visit </h3>
+    <strong>
+        <a href="{% url 'users:login' %}">Login again </a>
+    </strong>
+    <h6>You Will Redirect To Main Page In
+        <span id="counter">3</span> Second
+    </h6>
+</div>
+
 {%endblock%}
+
+{% block script %}
+<script>
+    setInterval(function () {
+        var div = document.querySelector("#counter");
+        var count = div.textContent * 1 - 1;
+        div.textContent = count;
+        if (count <= 0) {
+            window.location = '{% url "home:index" %}';
+        }
+    }, 1000);
+</script>
+{% endblock %}

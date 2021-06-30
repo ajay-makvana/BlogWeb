@@ -10,7 +10,7 @@
         {% for blog in blogposts %}
         <tr>
             <td>{{forloop.counter}}. {{blog.title}}&nbsp;&nbsp;&nbsp;</td>
-            <td><a href="{% url 'users:editArticle' blog.slug %}">Edit It </a>&nbsp;&nbsp;&nbsp;</td>
+            <td><a href="{% url 'users:editArticle' blog.slug %}">Edit</a>&nbsp;&nbsp;&nbsp;</td>
             <td><a href="{% url 'users:specific_article' blog.slug %}"> View Article </a>&nbsp;&nbsp;&nbsp;</td>
         </tr>
         {% endfor %}

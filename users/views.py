@@ -72,3 +72,11 @@ def newArticle(request):
             return render(request, 'users/newArticle.html', {'form': form})
     form = PostForm()
     return render(request, 'users/newArticle.html',{'form':form})
+
+def deleteArticle(request,slugOfArticle):
+    if(request.method == 'POST'):
+        article = Post.objects.get(slug=slugOfArticle)
+        article.delete()
+        return redirect('users:home')
+    else:
+        return redirect('home:index')
