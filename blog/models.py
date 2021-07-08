@@ -19,6 +19,7 @@ class Post(models.Model):
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     # views field for count views on blog post
     total_views = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User,related_name='like')
 
     def __str__(self):
         return self.title

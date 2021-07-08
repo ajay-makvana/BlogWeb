@@ -6,6 +6,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from blog.models import Post,Comment
 from users.forms import PostForm,CommentForm
+from blog import views
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
@@ -80,3 +82,12 @@ def deleteArticle(request,slugOfArticle):
         return redirect('users:home')
     else:
         return redirect('home:index')
+
+@login_required(login_url = 'users:login')
+def likeDislike(request,slugOfArticle):
+    article = Post.objects.get(slug = slugOfArticle)
+    if(request.user in article.likes.all()):
+        article.likes.remove(request.user)
+    else:
+        article.likes.add(request.user)
+    return redirect(request.META.get('HTTP_REFERER', '404error'))

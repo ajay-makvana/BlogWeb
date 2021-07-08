@@ -20,5 +20,7 @@ urlpatterns = [
     #EditArticles
     path('my-articles/edit/<str:slugOfArticle>', views.editArticle, name='editArticle'),
     #DeleteArticle
-    path('<str:slugOfArticle>', views.deleteArticle, name='deleteArticle'),
+    path('delete/<str:slugOfArticle>', views.deleteArticle, name='deleteArticle'),
+    #LikeDislike for blog home page
+    path('likeDislike/<str:slugOfArticle>', views.likeDislike, name='likeDislike'),
 ]

@@ -1,22 +1,35 @@
 {% extends 'base.html' %}
+{% block css %}
+.articleClass:hover{
+box-shadow: 5px 0px 20px 5px grey;
+border: 0px solid grey;
+border-radius: 15px;
+}
+{% endblock %}
 {%block blog %} active {% endblock %}
 {%block body%}
 <h2 align='center'>
     Blog Post
 </h2>
 {% for post in blogposts %}
-<div class="container my-3">
+<div class="container articleClass my-3">
     <div
         class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-primary">{{post.title}}</strong>
-            <div class="mb-0">By : {{post.author}}</div>
-            <div class="mb-1 text-muted">Created On : {{post.created_on}}</div>
-            <div class="mb-1 text-muted">Last Update On : {{post.updated_on}}</div>
-            <div class="mb-1 text-muted">Views : {{post.total_views}}</div><br>
+            <div class="mb-1">By : {{post.author}}</div>
+            <div class="mb-1 text-muted" style="clear: both;">
+                <div style="float: left;">Created On : {{post.created_on}}</div>
+                <div style="float: right;">Last Update On : {{post.updated_on}}</div>
+            </div>
+            <div class="mb-1 text-muted">Views : {{post.total_views}} Likes : {{post.likes.count}}</div>
             <p class="card-text mb-auto">{{post.content|safe|slice:"0:270"}} ...</p><br>
             <div class="my-2">
                 <a href="{% url 'blog:article' post.slug %}" role="button" class="btn btn-primary">Continue reading</a>
+                <form action="{% url 'users:likeDislike' post.slug %}" method="POST">
+                    {% csrf_token %}
+                    <button value="submit" role="button" class="btn btn-primary">Like</button>
+                </form>
             </div>
         </div>
     </div>
