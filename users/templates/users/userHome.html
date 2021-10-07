@@ -3,8 +3,11 @@
 {% block body %}
 <div class="container my-3">
     <i>Hey, {{user.username}} </i><br>
-    <b><a href="{% url 'users:newArticle' %}">Add New Article</a></b><br>
-    <b><a href="{% url 'users:userAllArticles' %}">All Your Article</a></b><br>
+    <b><a href="{% url 'users:newArticle' %}">Add New Article</a></b>
+    <br>
+    <b><a href="{% url 'users:userAllArticles' %}">All Your Article</a></b>
+    <br>
+    <br><br>
     <b>Your all blog post are as bellow</b>
     <table>
         {% for blog in blogposts %}
