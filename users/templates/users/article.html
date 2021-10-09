@@ -1,46 +1,164 @@
 {% extends 'base.html' %}
-{%block user %} active {% endblock %}
-{% block body %}
-<div align="center">
-    <h2>{{post.title}}</h2>
-</div>
+{%block blog %} active {% endblock %}
+
+{% block css %}
+<style>
+    .cancelbtn,
+    .deletebtn {
+        float: left;
+        width: 50%;
+    }
+
+    .cancelbtn {
+        background-color: #ccc;
+        color: black;
+    }
+
+    .deletebtn {
+        background-color: #f44336;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        padding-top: 50px;
+        background-color: rgba(128, 128, 128, 0.5)
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 5% auto 15% auto;
+        border: 1px solid #888;
+        width: 80%;
+        padding: 1%;
+    }
+
+    .close {
+        position: absolute;
+        right: 35px;
+        top: 15px;
+        font-size: 40px;
+        font-weight: bold;
+        color: #f1f1f1;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #f44336;
+        cursor: pointer;
+    }
+
+    .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+</style>
+{% endblock %}
+
+{%block body%}
+
+<!-- Article View -->
 <div class="container my-3">
-    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
+    <div
+        class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
-            <strong class="d-inline-block mb-2 text-primary">{{post.slug}}</strong>
-            <h3 class="mb-0">TITLE : {{post.title}}</h3>
-            <h3 class="mb-0">ID : {{post.id}}</h3>
+            <strong class="d-inline-block mb-2 text-info">
+                Status :
+                {% if post.status %}
+                Published
+                {%else%}
+                Draft
+                {%endif%}
+            </strong>
+            <!--
+            {% if post.status %}
+            your Blog Post is Publicly available
+            {%else%}
+            your Blog Post is saved as draft
+            {%endif%}
+            -->
+            <strong class="d-inline-block mb-2 text-primary">
+                <h3>{{post.title}}</h3>
+            </strong>
             <div class="mb-1 text-muted">Created On : {{post.created_on}}</div>
             <div class="mb-1 text-muted">Last Update On : {{post.updated_on}}</div>
             <p class="card-text mb-auto">{{post.content|safe}} ...</p>
             <div class="my-2">
-                <button href="{% url 'users:userAllArticles' %}" role="button" class="btn btn-primary">Back</button>
-                <button href="{% url 'users:editArticle' post.slug %}" role="button" class="btn btn-primary">Edit Article</button>
+                <form style="float: left;margin-right:5px" action="{% url 'users:likeDislike' post.slug %}"
+                    method="POST">
+                    {% csrf_token %}
+                    <button value="submit" role="button" class="my-2 btn btn-primary">Like</button>
+                </form>
+                <a href="{% url 'users:home' %}" role="button" class="my-2 btn btn-secondary">Back</a>
+                {% if user.is_authenticated and post.author == user %}
+                <br>
+                <a href="{% url 'users:editArticle' post.slug %}" role="button" class="my-2 btn btn-warning">Update</a>
+                <a role="button" class="my-2 btn btn-danger"
+                    onclick="document.getElementById('deletePopup').style.display='block'">Delete</a>
+                {% endif %}
             </div>
-        </div>
-        <div class="col-auto d-none d-lg-block">
-            <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-            </svg>
+
         </div>
     </div>
 </div>
+
+<!-- All Comments -->
 <div class="container my-3">
-        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
-            <div class="col p-4 d-flex flex-column position-static">
-                <strong class="d-inline-block mb-0 text-primary">Comments</strong>
-        {% for comment in comments %}
-        <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-1 shadow-sm h-md-250 my-0 position-relative">
-            <div class="col p-2 d-flex flex-column position-static">
-                <div class="mb-0">{{comment.content}}</div>
-                <b>
-                    <div class="mb-0">By {{comment.user.username}} At {{comment.created_on}}</div>
-                </b>
+    <div
+        class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-0 text-primary">Comments on your Blog Post</strong>
+            {% for comment in comments %}
+            <div
+                class="row no-gutters border rounded overflow-hidden flex-md-row mb-1 shadow-sm h-md-250 my-0 position-relative">
+                <div class="col p-2 d-flex flex-column position-static">
+                    <div class="mb-0">{{comment.content}}</div>
+                    <div class="mb-0">By <b>{{comment.user.username}}</b> At {{comment.created_on}}</div>
+                </div>
             </div>
-        </div>
-        {% endfor %}
-            </div>
+            {% endfor %}
         </div>
     </div>
+</div>
+
+<!--Alert PopUp for deletion of blog-->
+<div id="deletePopup" class="modal">
+    <span onclick="document.getElementById('deletePopup').style.display='none'" class="close"
+        title="Close Popup">X</span>
+    <form class="modal-content" method="POST" action="{% url 'users:deleteArticle' post.slug %}">
+        {% csrf_token %}
+        <div class="container" style="text-align: center;">
+            <h1>Delete Article </h1>
+            <p>Are you sure you want to delete this article ?</p>
+
+            <a role="button" onclick="document.getElementById('deletePopup').style.display='none'"
+                class="btn btn-primary">Cancel</a>
+            <button type="submit" value="submit" onclick="document.getElementById('deletePopup').style.display='none'"
+                class="btn btn-danger">Delete
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+    var modal = document.getElementById('deletePopup');
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+</script>
+
 {% endblock %}

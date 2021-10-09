@@ -6,5 +6,8 @@ app_name='blog'
 
 urlpatterns = [
     path('', views.blog, name='blog'),
+    #Article
     path('<str:slugOfArticle>', views.article, name='article'),
+    #Comment
+    path('comment/<str:slugOfArticle>', views.comment, name='comment'),
 ]

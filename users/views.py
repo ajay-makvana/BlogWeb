@@ -1,53 +1,29 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,redirect
-from django.contrib.auth.models import User
-from django.contrib.auth.models import auth
+from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from blog.models import Post,Comment
 from users.forms import PostForm,CommentForm
+from blog import views
+from django.http import HttpResponseRedirect
 
 # Create your views here.
 
-def signup(request):
-    if request.method == 'POST':
-        print(request.POST)
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        email = request.POST['email']
-        username = request.POST['username']
-        password1 = request.POST['password1']
-        password2 = request.POST['password2']
-        if password1==password2:
-            if User.objects.filter(username=username).exists():
-                messages.info(request,'UserName Already Taken')
-            elif User.objects.filter(email=email).exists():
-                messages.info(request,'Email Already Registered')
-            else:
-                new_user = User.objects.create_user(username=username,first_name=first_name,last_name=last_name,email=email,password=password1)
-                new_user.save()
-                print(new_user)
-                auth.login(request, new_user)
-                return redirect('home:index')
+def register(request):
+    if request.method == 'GET':
+        return render(request,'registration/user_register.html')
+    else:
+        form_user_creation = UserCreationForm(data=request.POST)
+        messages.info(request, form_user_creation.errors)
+        if form_user_creation.is_valid():
+            new_user = form_user_creation.save();
+            login(request,new_user)
+            return redirect('home:index')
         else:
-            messages.info(request,'Password Not Matched')
-
-    return render(request,'users/signup.html')
-
-def login(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = auth.authenticate(username=username,password=password)
-        if user is not None:
-            auth.login(request,user)
-            return redirect("home:index")
-        else:
-            messages.info(request,'Invalid Username or Password')
-    return render(request,'users/login.html')
-
-def logout(request):
-    auth.logout(request)
-    return redirect("home:index")
+            form_user_creation = UserCreationForm(data=request.POST)
+            return render(request,'registration/user_register.html',{'form_user_creation':form_user_creation})
 
 @login_required(login_url='users:login')
 def home(request):
@@ -60,7 +36,7 @@ def home(request):
 def userAllArticles(request):
     user = request.user
     blogposts = Post.objects.filter(author = user).order_by('-created_on')
-    context = {'blogposts':blogposts}
+    context = {'blogposts':blogposts,'username':user}
     return render(request,'users/userAllArticles.html',context)
 
 @login_required(login_url= 'users:login')
@@ -99,16 +75,19 @@ def newArticle(request):
     form = PostForm()
     return render(request, 'users/newArticle.html',{'form':form})
 
-@login_required(login_url= 'users:login')
-def comment(request,slugOfArticle):
-    if request.method == 'POST':
-        form = CommentForm(request.POST, request.FILES)
-        if form.is_valid():
-            new_comment = form.save(commit=False)
-            new_comment.user = request.user
-            new_comment.postid = Post.objects.filter(slug=slugOfArticle)[0]
-            new_comment.save()
-            return redirect('blog:article',slugOfArticle)
-        else:
-            messages.info(request,'Plase all add details carefull there is error')
-            return redirect('blog:article',slugOfArticle,{'form':form})
+def deleteArticle(request,slugOfArticle):
+    if(request.method == 'POST'):
+        article = Post.objects.get(slug=slugOfArticle)
+        article.delete()
+        return redirect('users:home')
+    else:
+        return redirect('home:index')
+
+@login_required(login_url = 'users:login')
+def likeDislike(request,slugOfArticle):
+    article = Post.objects.get(slug = slugOfArticle)
+    if(request.user in article.likes.all()):
+        article.likes.remove(request.user)
+    else:
+        article.likes.add(request.user)
+    return redirect(request.META.get('HTTP_REFERER', '404error'))

@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{%block register %} active {% endblock %}
+
+{% block body %}
+<div>
+    <div class="card " style="margin-left: 20%;margin-right: 20%;">
+        <b>
+            <div class="card-header text-center">
+                User Registration
+            </div>
+        </b>
+        <div class="card-body">
+            <form method="post" action="{% url 'users:register' %}">
+                {% csrf_token %}
+
+                <div class="form-floating my-3">
+                    <input type="text" name="first_name" class="form-control" id='first_name'
+                        value="{{ form_user_creation.data.first_name }}" placeholder="First Name" required>
+                    <label for="first_name">First Name</label>
+                    {{ form_user_creation.first_name.errors }}
+                </div>
+
+                <div class="form-floating my-3">
+                    <input type="text" class="form-control" name="last_name" id='last_name'
+                        value="{{ form_user_creation.data.last_name }}" placeholder="Last Name">
+                    <label for="last_name">Last Name</label>
+                </div>
+
+                <div class="form-floating my-3">
+                    {% if form_user_creation.email.errors %}
+                    <input type="email" class="form-control" name="email" id='email'
+                        value="{{ form_user_creation.data.email }}" placeholder="Email" required>
+                    <label for="email">Email</label>
+                    <div class="alert alert-danger" role="alert">
+                        {{ form_user_creation.email.errors }}
+                    </div>
+                    {% else %}
+                    <input type="email" class="form-control" name="email" id='email'
+                        value="{{ form_user_creation.data.email }}" placeholder="Email" required>
+                    <label for="email">Email</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating my-3">
+                    {% if form_user_creation.username.errors %}
+                    <input type="text" class="form-control" name="username" id='username'
+                        value="{{ form_user_creation.data.username }}" autofocus=placeholder="UserName" required>
+                    <label for="username">Username</label>
+                    <div class="alert alert-danger" role="alert">
+                        {{ form_user_creation.username.errors }}
+                    </div>
+                    {% else %}
+                    <input type="text" class="form-control" name="username" id='username'
+                        value="{{ form_user_creation.data.username }}" placeholder="UserName" required>
+                    <label for="username">Username</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating my-3">
+                    {% if form_user_creation.password1.errors %}
+                    <input type="password" class="form-control" name="password1" id='password1' placeholder="PassWord"
+                        required>
+                    <label for="password1">Password</label>
+                    <div class="alert alert-danger" role="alert">
+                        {{ form_user_creation.password1.errors }}
+                    </div>
+                    {% else %}
+                    <input type="password" class="form-control" name="password1" id='password1' placeholder="PassWord"
+                        required>
+                    <label for="password1">Password</label>
+                    {% endif %}
+                </div>
+
+                <div class="form-floating my-3">
+                    {% if form_user_creation.password2.errors %}
+                    <input type="password" class="form-control" name="password2" id='password2'
+                        placeholder="Confirm Password" required>
+                    <label for="password2">Confirm Password</label>
+                    <div class="alert alert-danger" role="alert">
+                        {{ form_user_creation.password2.errors }}
+                    </div>
+                    {% else %}
+                    <input type="password" class="form-control" name="password2" id='password2'
+                        placeholder="Confirm Password" required>
+                    <label for="password2">Confirm Password</label>
+                    {% endif %}
+                </div>
+
+                <div class="text-center">
+                    <button class="btn btn-outline-primary" style="align-items: center;" name="submit">Register</button>
+                </div>
+                <input type="hidden" name="next" value="{% url 'home:index' %}" />
+
+            </form>
+
+        </div>
+        <div class="card-footer text-center" >
+            <strong>Already Have Account ? <a href="{% url 'users:login' %}">Login Here</a> </strong>
+        </div>
+    </div>
+</div>
+{% endblock %}
