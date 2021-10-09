@@ -1,25 +1,36 @@
 {% extends 'base.html' %}
-{%block user %} active {% endblock %}
-{% block body %}
-<h2>Blog Posts</h2>
+{% block css %}
+.articleClass:hover{
+box-shadow: 5px 0px 20px 5px grey;
+border: 0px solid grey;
+border-radius: 15px;
+}
+{% endblock %}
+{%block blog %} active {% endblock %}
+{%block body%}
+<h2 style="text-align: center;">
+    all Blog Post of user @ {{username}}
+</h2>
 {% for post in blogposts %}
-<div class="container my-3">
-    <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
+<div class="container articleClass my-3">
+    <div
+        class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 my-4 position-relative">
         <div class="col p-4 d-flex flex-column position-static">
             <strong class="d-inline-block mb-2 text-primary">{{post.title}}</strong>
-            <div class="mb-0">By : {{post.author}}</div>
-            <div class="mb-1 text-muted">Created On : {{post.created_on}}</div>
-            <div class="mb-1 text-muted">Last Update On : {{post.updated_on}}</div><br>
-            <p class="card-text mb-auto">{{post.content|safe|slice:"0:270"}} ...</p><br>
-            <div class="my-2">
-                <a href="{% url 'blog:article' post.slug %}" role="button" class="btn btn-primary">Continue reading</a>
+            <div class="mb-1">By : {{post.author}}</div>
+            <div class="mb-1 text-muted" style="clear: both;">
+                <div style="float: left;">Created On : {{post.created_on}}</div>
+                <div style="float: right;">Last Update On : {{post.updated_on}}</div>
             </div>
-        </div>
-        <div class="col-auto d-none d-lg-block">
-            <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail">
-                <title>Placeholder</title>
-                <rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
-            </svg>
+            <div class="mb-1 text-muted">Views : {{post.total_views}} Likes : {{post.likes.count}}</div>
+            <p class="card-text mb-auto">{{post.content|safe|slice:"0:270"}} ...</p><br>
+            <div class="my-2" >
+                <form style="float: left;margin-right:5px" action="{% url 'users:likeDislike' post.slug %}" method="POST">
+                    {% csrf_token %}
+                    <button value="submit" role="button" class="my-2 btn btn-primary">Like</button>
+                </form>
+                <a href="{% url 'blog:article' post.slug %}" role="button" class="my-2 btn btn-secondary">Continue Reading &rarr;</a>
+            </div>
         </div>
     </div>
 </div>

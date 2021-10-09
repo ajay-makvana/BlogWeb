@@ -9,7 +9,7 @@
 <!-- Container Show Most 3 Recenet Post -->
 <div class="container">
     <fieldset>
-        <legend>3 Most recent added Post</legend>
+        <h3><legend>3 Most recent added Post</legend></h3>
         <!-- Blog Entries Column -->
         {% for post in most3recentadded %}
         <div class="col-md-8 mt-3 left">
@@ -18,7 +18,7 @@
                     <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
                     <p class="card-text">{{post.content|safe|slice:":200" }}</p>
-                    <a href="{%url 'blog:article' post.slug %}" class="btn btn-primary">Read More &rarr;</a>
+                    <a href="{%url 'blog:article' post.slug %}" class="btn btn-primary">Continue Reading &rarr;</a>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
 <!-- Container Show Most 3 Liked Post -->
 <div class="container">
     <fieldset>
-        <legend>3 Most Liked Post</legend>
+        <h3><legend>3 Most Liked Post</legend></h3>
         <!-- Blog Entries Column -->
         {% for post in most3liked %}
         <div class="col-md-8 mt-3 left">
@@ -38,7 +38,7 @@
                     <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-text text-muted h6">{{ post.author }} | {{ post.created_on}} </p>
                     <p class="card-text">{{post.content|safe|slice:":200" }}</p>
-                    <a href="{% url 'blog:article' post.slug %}" class="btn btn-primary">Read More &rarr;</a>
+                    <a href="{% url 'blog:article' post.slug %}" class="btn btn-primary">Continue Reading &rarr;</a>
                 </div>
             </div>
         </div>

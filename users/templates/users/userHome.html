@@ -2,21 +2,34 @@
 {%block user %} active {% endblock %}
 {% block body %}
 <div class="container my-3">
-    <i>Hey, {{user.username}} </i><br>
-    <b><a href="{% url 'users:newArticle' %}">Add New Article</a></b>
-    <br>
-    <b><a href="{% url 'users:userAllArticles' %}">All Your Article</a></b>
-    <br>
-    <br><br>
-    <b>Your all blog post are as bellow</b>
-    <table>
-        {% for blog in blogposts %}
-        <tr>
-            <td>{{forloop.counter}}. {{blog.title}}&nbsp;&nbsp;&nbsp;</td>
-            <td><a href="{% url 'users:editArticle' blog.slug %}">Edit</a>&nbsp;&nbsp;&nbsp;</td>
-            <td><a href="{% url 'users:specific_article' blog.slug %}"> View Article </a>&nbsp;&nbsp;&nbsp;</td>
-        </tr>
-        {% endfor %}
+    <h3>Hi ,<i> {{user.username}} </i></h3>
+    <div class="my-2">
+        <a href="{% url 'users:newArticle' %}" class="btn btn-primary">Add New Article</a>
+        <a href="{% url 'users:userAllArticles' %}" class="btn btn-primary">All Your Article</a>
+    </div>
+    <h3>Your all blog post are as bellow</h3>
+    <table class="table table-bordered border-primary table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Article Name</th>
+                <th scope="col">Status</th>
+                <th scope="col">Edit</th>
+                <th scope="col">View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for blog in blogposts %}
+            <tr>
+                <td>{{forloop.counter}}.</td>
+                <td>{{blog.title}}</td>
+                <td>{% if blog.status %} Published {% else %} Draft {% endif %}</td>
+                <td><a href="{% url 'users:editArticle' blog.slug %}">Edit</a></td>
+                <td><a href="{% url 'users:specific_article' blog.slug %}">View</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
 {% endblock %}

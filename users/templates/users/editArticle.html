@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {%block user %} active {% endblock %}
 {% block body %}
-<b>EDIT ARTICLE</b>
+
 <div class="container my-3">
 <form method="post" action="{% url 'users:editArticle' post.slug %}" >
     {% csrf_token %}

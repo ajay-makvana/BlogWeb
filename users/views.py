@@ -36,7 +36,7 @@ def home(request):
 def userAllArticles(request):
     user = request.user
     blogposts = Post.objects.filter(author = user).order_by('-created_on')
-    context = {'blogposts':blogposts}
+    context = {'blogposts':blogposts,'username':user}
     return render(request,'users/userAllArticles.html',context)
 
 @login_required(login_url= 'users:login')
