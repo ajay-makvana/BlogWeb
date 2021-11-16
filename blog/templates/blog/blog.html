@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% block css %}
-.articleClass:hover{
-box-shadow: 5px 0px 20px 5px grey;
-border: 0px solid grey;
-border-radius: 15px;
+.articleClass:hover
+{
+    box-shadow: 5px 0px 20px 5px grey;
+    border: 0px solid grey;
+    border-radius: 15px;
 }
 {% endblock %}
 {%block blog %} active {% endblock %}
@@ -24,12 +25,14 @@ border-radius: 15px;
             </div>
             <div class="mb-1 text-muted">Views : {{post.total_views}} Likes : {{post.likes.count}}</div>
             <p class="card-text mb-auto">{{post.content|safe|slice:"0:270"}} ...</p><br>
-            <div class="my-2" >
-                <form style="float: left;margin-right:5px" action="{% url 'users:likeDislike' post.slug %}" method="POST">
+            <div class="my-2">
+                <form style="float: left;margin-right:5px" action="{% url 'users:likeDislike' post.slug %}"
+                    method="POST">
                     {% csrf_token %}
                     <button value="submit" role="button" class="my-2 btn btn-primary">Like</button>
                 </form>
-                <a href="{% url 'blog:article' post.slug %}" role="button" class="my-2 btn btn-secondary">Continue Reading &rarr;</a>
+                <a href="{% url 'blog:article' post.slug %}" role="button" class="my-2 btn btn-secondary">Continue
+                    Reading &rarr;</a>
             </div>
         </div>
     </div>
