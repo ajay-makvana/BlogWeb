@@ -9,7 +9,7 @@ Ckeditor is used for post content creation
 1) Blog (for blogpost)
 2) User (for users)
 
-#Some ScreenShots
+**Some ScreenShots**
 ![Screenshot (1367)](https://user-images.githubusercontent.com/74095250/141988558-0f8d97e8-f307-496f-bd72-d68dfc31e2fe.png)
 
 ![Screenshot (1368)](https://user-images.githubusercontent.com/74095250/141988877-c9aa0ecd-047e-48e8-8be2-0e370e76e37a.png)
